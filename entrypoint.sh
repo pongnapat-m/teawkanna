@@ -20,6 +20,11 @@ sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:$PORT>/g" /etc/apache2/sites-avail
 echo "Injecting AllowOverride All for /var/www/html..."
 sed -i "s|<\/VirtualHost>|<Directory /var/www/html>\n    Options Indexes FollowSymLinks\n    AllowOverride All\n    Require all granted\n<\/Directory>\n<\/VirtualHost>|g" /etc/apache2/sites-available/000-default.conf
 
+# Debug: Print the virtual host configuration file
+echo "=== 000-default.conf content ==="
+cat /etc/apache2/sites-available/000-default.conf
+echo "=== End of 000-default.conf ==="
+
 # Run the default apache2-foreground command
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
