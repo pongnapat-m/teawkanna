@@ -25,6 +25,9 @@ RUN find /var/www/html/tkn -type f \( -name "*.php" -o -name "*.css" -o -name "*
 # Add a redirect from / to /tkn/
 RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
 
+# Add index.php to /tkn/ so DirectoryIndex resolves (the .htaccess skip-directory rule blocks rewrites for the directory itself)
+RUN echo '<?php require __DIR__ . "/pages/home.php";' > /var/www/html/tkn/index.php
+
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN find /var/www/html -type d -exec chmod 755 {} \;
