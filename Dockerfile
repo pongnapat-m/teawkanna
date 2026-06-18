@@ -24,6 +24,8 @@ RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
+RUN find /var/www/html -type d -exec chmod 755 {} \;
+RUN find /var/www/html -type f -exec chmod 644 {} \;
 
 # Setup entrypoint script to prevent MPM conflicts at runtime
 COPY entrypoint.sh /entrypoint.sh
