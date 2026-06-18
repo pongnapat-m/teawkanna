@@ -1,4 +1,11 @@
 <?php
+// Prevent port 8080 from being accessed externally on Railway production
+if (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'up.railway.app:8080')) {
+    $clean_host = str_replace(':8080', '', $_SERVER['HTTP_HOST']);
+    header("Location: https://" . $clean_host . $_SERVER['REQUEST_URI'], true, 301);
+    exit();
+}
+
 require_once __DIR__ . '/config/env.php';
 
 $host = (string) env('DB_HOST', env('MYSQLHOST', '127.0.0.1'));
