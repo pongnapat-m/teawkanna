@@ -25,6 +25,11 @@ echo "=== 000-default.conf content ==="
 cat /etc/apache2/sites-available/000-default.conf
 echo "=== End of 000-default.conf ==="
 
+# Debug: Print all files inside the tkn directory to verify if .htaccess exists
+echo "=== /var/www/html/tkn/ files ==="
+ls -la /var/www/html/tkn/
+echo "=== End of tkn files ==="
+
 # Run the default apache2-foreground command
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
