@@ -3,11 +3,11 @@
 require_once dirname(__DIR__) . '/config/env.php';
 // Database configuration (edit these values for your environment)
 // Recommended: keep credentials out of version control and use environment vars in production.
-$dbHost = (string) env('DB_HOST', '127.0.0.1');
-$dbPort = (string) env('DB_PORT', '3306');
-$dbName = (string) env('DB_NAME', 'teawkanna');
-$dbUser = (string) env('DB_USER', 'root');
-$dbPass = (string) env('DB_PASS', '');
+$dbHost = (string) env('DB_HOST', env('MYSQLHOST', '127.0.0.1'));
+$dbPort = (string) env('DB_PORT', env('MYSQLPORT', '3306'));
+$dbName = (string) env('DB_NAME', env('MYSQLDATABASE', 'teawkanna'));
+$dbUser = (string) env('DB_USER', env('MYSQLUSER', 'root'));
+$dbPass = (string) env('DB_PASS', env('MYSQLPASSWORD', ''));
 
 $dsn = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4";
 

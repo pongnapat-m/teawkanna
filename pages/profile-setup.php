@@ -6,13 +6,19 @@ $user = ['fullname' => '', 'username' => '', 'phonenumber' => '', 'email' => '',
 
 if (isset($_SESSION['user_id'])) {
     try {
+        $dbHost = (string) env('DB_HOST', env('MYSQLHOST', '127.0.0.1'));
+        $dbPort = (int) env('DB_PORT', env('MYSQLPORT', 3306));
+        $dbName = (string) env('DB_NAME', env('MYSQLDATABASE', 'teawkanna'));
+        $dbUser = (string) env('DB_USER', env('MYSQLUSER', 'root'));
+        $dbPass = (string) env('DB_PASS', env('MYSQLPASSWORD', ''));
+
         $dsn = sprintf(
-            'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-            env('DB_HOST', '127.0.0.1'),
-            env('DB_PORT', '3306'),
-            env('DB_NAME', 'teawkanna')
+            'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
+            $dbHost,
+            $dbPort,
+            $dbName
         );
-        $pdo  = new PDO($dsn, (string) env('DB_USER', 'root'), (string) env('DB_PASS', ''), [
+        $pdo  = new PDO($dsn, $dbUser, $dbPass, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ]);
         $stmt = $pdo->prepare('SELECT fullname, username, phonenumber, email, profile_pic FROM user WHERE user_id = ?');
