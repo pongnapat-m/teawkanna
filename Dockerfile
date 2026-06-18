@@ -1,5 +1,9 @@
 FROM php:8.2-apache
 
+# Disable conflicting MPMs and ensure only prefork is enabled
+RUN a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork
+
 # Enable mod_rewrite and mod_headers
 RUN a2enmod rewrite headers
 
