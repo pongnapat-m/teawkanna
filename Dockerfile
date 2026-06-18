@@ -27,6 +27,10 @@ RUN chown -R www-data:www-data /var/www/html
 RUN find /var/www/html -type d -exec chmod 755 {} \;
 RUN find /var/www/html -type f -exec chmod 644 {} \;
 
+# Debug: check if .htaccess exists and check apache2.conf AllowOverride settings
+RUN ls -la /var/www/html/tkn/
+RUN grep -A 5 "<Directory /var/www/>" /etc/apache2/apache2.conf
+
 # Setup entrypoint script to prevent MPM conflicts at runtime
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
