@@ -4,6 +4,9 @@ FROM php:8.2-apache
 RUN a2dismod mpm_event mpm_worker || true
 RUN a2enmod mpm_prefork
 
+# Debug: Print enabled MPM modules during build
+RUN ls -la /etc/apache2/mods-enabled/ | grep mpm
+
 # Enable mod_rewrite and mod_headers
 RUN a2enmod rewrite headers
 
