@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/config/env.php';
 
-$host = (string) env('DB_HOST', '127.0.0.1');
-$port = (int) env('DB_PORT', 3306);
-$user = (string) env('DB_USER', 'root');
-$pass = (string) env('DB_PASS', '');
-$db   = (string) env('DB_NAME', 'teawkanna');
+$host = (string) env('DB_HOST', env('MYSQLHOST', '127.0.0.1'));
+$port = (int) env('DB_PORT', env('MYSQLPORT', 3306));
+$user = (string) env('DB_USER', env('MYSQLUSER', 'root'));
+$pass = (string) env('DB_PASS', env('MYSQLPASSWORD', ''));
+$db   = (string) env('DB_NAME', env('MYSQLDATABASE', 'teawkanna'));
 
 $conn = mysqli_connect($host, $user, $pass, $db, $port);
 

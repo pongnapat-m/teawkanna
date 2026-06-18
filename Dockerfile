@@ -1,10 +1,22 @@
 FROM php:8.2-apache
 
-# สั่งติดตั้งโมดูล mysqli เข้าไปใน OS ตรงๆ
+# Enable mod_rewrite and mod_headers
+RUN a2enmod rewrite headers
+
+# Configure Apache to allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Install mysqli extension
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
-# คัดลอกโค้ดทั้งหมดในโปรเจกต์เข้าตู้คอนเทนเนอร์
-COPY . /var/www/html/
+# Create a subdirectory to maintain the /tkn subpath structure
+RUN mkdir -p /var/www/html/tkn
 
-# เปิดสิทธิ์ให้ระบบเข้าถึงไฟล์ได้ตามปกติ
+# Copy project files into /var/www/html/tkn/
+COPY . /var/www/html/tkn/
+
+# Add a redirect from / to /tkn/
+RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
+
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
