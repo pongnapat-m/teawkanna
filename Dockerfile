@@ -19,6 +19,9 @@ RUN mkdir -p /var/www/html/tkn
 # Copy project files into /var/www/html/tkn/
 COPY . /var/www/html/tkn/
 
+# Convert Windows CRLF line endings to Unix LF (critical for .htaccess)
+RUN find /var/www/html/tkn -type f \( -name "*.php" -o -name "*.css" -o -name "*.js" -o -name "*.html" -o -name ".htaccess" -o -name "*.conf" \) -exec sed -i 's/\r$//' {} \;
+
 # Add a redirect from / to /tkn/
 RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
 
