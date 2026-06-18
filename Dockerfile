@@ -10,8 +10,8 @@ RUN a2enmod rewrite headers
 # Configure Apache to allow .htaccess overrides
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
-# Install mysqli extension
-RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+# Install mysqli and pdo_mysql extensions
+RUN docker-php-ext-install mysqli pdo_mysql && docker-php-ext-enable mysqli pdo_mysql
 
 # Create a subdirectory to maintain the /tkn subpath structure
 RUN mkdir -p /var/www/html/tkn
