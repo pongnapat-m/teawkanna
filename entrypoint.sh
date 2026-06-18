@@ -30,6 +30,11 @@ echo "=== /var/www/html/tkn/ files ==="
 ls -la /var/www/html/tkn/
 echo "=== End of tkn files ==="
 
+# Debug: Print all enabled Apache modules
+echo "=== Apache enabled modules ==="
+ls -la /etc/apache2/mods-enabled/
+echo "=== End of enabled modules ==="
+
 # Run the default apache2-foreground command
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
