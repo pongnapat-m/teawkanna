@@ -1,0 +1,23 @@
+.env
+*.log
+*_debug.txt
+service_account.json
+*.sql
+*.code-workspace
+*-deploy.zip
+*.zip
+.DS_Store
+Thumbs.db
+
+# Runtime/user data
+handlers/uploads/
+assets/uploads/
+
+# Local-only utilities and test endpoints
+test.php
+test_curl.php
+admin/test_omise.php
+
+# Documentation/source artifacts not needed by the application
+component_diagrams.pptx
+PATCH_README.txt

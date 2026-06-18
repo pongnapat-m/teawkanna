@@ -1,0 +1,299 @@
+/* =====================================================
+   contact.css — Contact Page Styles
+   เที่ยวกันนา (Teawkanna)
+   ===================================================== */
+
+/* ===== Contact Split Section ===== */
+.contact-section {
+    position: relative;
+    background:
+        linear-gradient(to right,
+            #283618 0%,
+            #283618 58%,
+            rgba(163, 131, 24, 0.151) 42%,
+            rgba(163, 131, 24, 0.151) 100%),
+        url('https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=1678&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center / cover no-repeat;
+    min-height: calc(100vh - 70px);
+    padding: 80px 0 100px;
+}
+
+.contact-section .container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+/* ===== LEFT — Contact Info ===== */
+.contact-left {
+    color: #fff;
+    padding-top: 10px;
+}
+
+.contact-left h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(48px, 6.5vw, 80px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.05;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.contact-left .contact-desc {
+    font-family: 'Kanit', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.85;
+    margin-bottom: 40px;
+    max-width: 420px;
+}
+
+/* Info rows */
+.contact-info-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contact-info-row:first-of-type {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contact-info-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.ci-label {
+    font-family: 'Kanit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 3px;
+}
+
+.ci-value {
+    font-family: 'Kanit', sans-serif;
+    font-size: 15px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.ci-value a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Social row */
+.contact-social-row {
+    padding-top: 26px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.social-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.social-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.65);
+    color: #fff;
+}
+
+/* ===== RIGHT — Form Card ===== */
+.contact-right {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.contact-form-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px 38px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.contact-form-card h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 5px;
+}
+
+.contact-form-card .form-sub {
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 26px;
+}
+
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.cf-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.cf-group label {
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.cf-group label .req {
+    color: #c0392b;
+    margin-left: 2px;
+}
+
+.cf-group input,
+.cf-group textarea {
+    font-family: 'Kanit', sans-serif;
+    font-size: 14px;
+    padding: 10px 13px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 7px;
+    background-color: #fafafa;
+    color: #222;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.cf-group input:focus,
+.cf-group textarea:focus {
+    border-color: #283618;
+    background-color: #fff;
+}
+
+.cf-group textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+.cf-btn-submit {
+    width: 100%;
+    background-color: #283618;
+    color: #fff;
+    font-family: 'Kanit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    transition: background-color 0.2s, transform 0.15s;
+}
+
+.cf-btn-submit:hover {
+    background-color: #1e2b10;
+    transform: translateY(-1px);
+}
+
+.cf-btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Alert */
+.cf-alert {
+    border-radius: 7px;
+    padding: 11px 14px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cf-alert-success {
+    background-color: #f0faf0;
+    border: 1px solid #a8d5a8;
+    color: #2b6e2b;
+}
+
+.cf-alert-error {
+    background-color: #fff5f5;
+    border: 1px solid #f5c5c5;
+    color: #c0392b;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 960px) {
+    .contact-section {
+        background:
+            linear-gradient(rgba(28, 40, 18, 0.88), rgba(28, 40, 18, 0.88)),
+            url('https://www.printwallpaper.net/wp-content/uploads/2021/10/FRM_001_beautiful-morning-fog-rice-field.jpg') center / cover no-repeat;
+        padding: 60px 0 80px;
+    }
+
+    .contact-section .container {
+        grid-template-columns: 1fr;
+        gap: 44px;
+        padding: 0 24px;
+    }
+
+    .contact-right {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 540px) {
+    .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-left h1 {
+        font-size: 42px;
+    }
+
+    .contact-form-card {
+        padding: 28px 20px;
+    }
+}

@@ -1,0 +1,96 @@
+/* Shared user navbar behavior. Keep this file limited to responsive rules. */
+@media (max-width: 768px) {
+    .header .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .mobile-menu-toggle {
+        display: block !important;
+        position: relative;
+        z-index: 10001;
+        color: #fff8cb;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    .nav {
+        display: none !important;
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        flex-direction: column;
+        gap: 0;
+        padding: 80px 30px 30px;
+        overflow-y: auto;
+        background-color: #2b4218;
+    }
+
+    .nav.active {
+        display: flex !important;
+    }
+
+    .nav .nav-link {
+        width: 100%;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff8cb;
+        font-size: 16px;
+        text-align: left;
+        opacity: 1;
+    }
+
+    .nav .nav-link.active {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-user-wrapper {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-user-btn {
+        display: none;
+    }
+
+    .nav-user-dropdown {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    .nav .nav-dropdown-item,
+    .nav .nav-dropdown-item:link,
+    .nav .nav-dropdown-item:visited {
+        padding: 16px 0;
+        border: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        background: transparent;
+        color: #fff8cb !important;
+        font-size: 16px;
+    }
+
+    .nav .nav-dropdown-item:hover,
+    .nav .nav-dropdown-item:focus {
+        background: rgba(255, 255, 255, 0.08) !important;
+        color: #fff !important;
+    }
+
+    .nav .nav-dropdown-item.active {
+        background: rgba(255, 248, 203, 0.14) !important;
+        color: #fff8cb !important;
+        border-left: 3px solid #fff8cb;
+        padding-left: 13px;
+    }
+}

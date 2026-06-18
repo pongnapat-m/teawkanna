@@ -1,0 +1,187 @@
+/* Shared user footer layout. Keep this file limited to responsive rules. */
+.responsive-home-footer,
+.responsive-footer-line-fab {
+    display: none;
+}
+
+/* Keep footer contact links consistent instead of using browser link colors. */
+.footer .footer-social a,
+.footer .footer-social a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer .footer-social a:hover {
+    color: #adc87a;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 50px 20px 0;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: none;
+        gap: 30px;
+        margin-bottom: 30px;
+        padding-bottom: 0;
+    }
+
+    .footer-left,
+    .footer-menu,
+    .footer-social {
+        width: 100%;
+    }
+
+    .footer-logo-img {
+        height: 64px;
+    }
+
+    .footer-logo {
+        margin-bottom: 12px;
+        font-size: 22px;
+    }
+
+    .footer-left p,
+    .footer-tagline {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .footer-heading,
+    .footer-menu h4,
+    .footer-social h4 {
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .footer-menu ul,
+    .footer-social ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-menu ul li,
+    .footer-social ul li {
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
+
+    .footer-bottom {
+        padding: 20px 0;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .legacy-user-footer {
+        display: none;
+    }
+
+    .responsive-home-footer {
+        display: block;
+        background: linear-gradient(160deg, #1a2e0e 0%, #2b4218 60%, #1f3410 100%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .responsive-home-footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #adc87a, #2b4218, #adc87a);
+    }
+
+    .responsive-home-footer .footer-heading {
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(173, 200, 122, 0.2);
+        color: #adc87a;
+    }
+
+    .responsive-home-footer .footer-menu a {
+        display: inline-flex;
+        align-items: center;
+        color: #c8dbb0;
+        text-decoration: none;
+    }
+
+    .responsive-home-footer .footer-social li {
+        color: #c8dbb0;
+    }
+
+    .responsive-home-footer .footer-social a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .responsive-home-footer .footer-contact-icon {
+        width: 16px;
+        margin-right: 10px;
+        color: #adc87a;
+    }
+
+    .responsive-home-footer .footer-li-arrow {
+        margin-right: 8px;
+        color: #adc87a;
+        font-size: 10px;
+    }
+
+    .responsive-home-footer .footer-social-icons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .responsive-home-footer .footer-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(173, 200, 122, 0.35);
+        border-radius: 50%;
+        background: rgba(173, 200, 122, 0.15);
+        color: #adc87a;
+        text-decoration: none;
+    }
+
+    .responsive-home-footer .footer-bottom {
+        border-top: 1px solid rgba(173, 200, 122, 0.15);
+        background: rgba(0, 0, 0, 0.15);
+        color: #7a9e62;
+    }
+
+    .booking-responsive-footer {
+        padding-bottom: 104px;
+    }
+
+    .booking-responsive-footer .footer-content {
+        padding-bottom: 0;
+    }
+
+    .booking-responsive-footer .footer-bottom {
+        margin-bottom: 0;
+    }
+
+    .responsive-footer-line-fab {
+        position: fixed;
+        right: 24px;
+        bottom: 28px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #06c755;
+        box-shadow: 0 4px 18px rgba(6, 199, 85, 0.45);
+        color: #fff;
+        font-size: 27px;
+        text-decoration: none;
+    }
+}

@@ -1,0 +1,89 @@
+Options -Indexes
+RewriteEngine On
+
+# Prevent accidental disclosure of secrets, backups, logs and local tooling.
+<FilesMatch "(^\.|\.env|\.sql$|\.log$|_debug\.txt$|service_account\.json$|\.code-workspace$|PATCH_README\.txt$|component_diagrams\.pptx$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# ─── ปรับ RewriteBase ให้ตรงกับ path ที่ติดตั้ง ───────────────────────────────
+# ถ้าวางไว้ที่ root ของ domain เปลี่ยนเป็น  RewriteBase /
+# ถ้าวางไว้ใน subfolder เช่น /tkn/         คงค่านี้ไว้
+RewriteBase /tkn/
+
+RewriteRule ^(config|db\.php|scripts)(/|$) - [F,L]
+RewriteRule ^(test(_curl)?\.php|admin/test_omise\.php)$ - [F,L]
+
+# handlers: บล็อกแค่การเปิด folder โดยตรง แต่อนุญาต PHP files
+RewriteRule ^handlers/$ - [F,L]
+# อนุญาตให้เข้าถึงไฟล์ภาพใน uploads/slips/ โดยตรง (สำหรับแสดงสลิปฝั่ง admin)
+RewriteRule ^handlers/uploads/slips/.+\.(jpg|jpeg|png|gif|webp)$ - [NC,L]
+# อนุญาตให้เข้าถึงไฟล์ภาพ avatar โดยตรง (สำหรับแสดงรูปโปรไฟล์)
+RewriteRule ^handlers/uploads/avatars/.+\.(jpg|jpeg|png|gif|webp)$ - [NC,L]
+# อนุญาตให้เข้าถึงรูปร้านและรูปกิจกรรมที่อัปโหลด
+RewriteRule ^handlers/uploads/shop_pics/.+\.(jpg|jpeg|png|gif|webp)$ - [NC,L]
+RewriteRule ^handlers/uploads/activity_pics/.+\.(jpg|jpeg|png|gif|webp)$ - [NC,L]
+RewriteRule ^handlers/uploads(/|$) - [F,L]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ADMIN ROUTES — ต้องอยู่ก่อน -f/-d check เพราะ admin/ เป็น directory จริง
+# ══════════════════════════════════════════════════════════════════════════════
+RewriteRule ^admin/?$                admin/dashboard.php  [L,QSA]
+RewriteRule ^admin/activities/?$     admin/activities.php [L,QSA]
+RewriteRule ^admin/payments/?$       admin/payment.php    [L,QSA]
+RewriteRule ^admin/users/?$          admin/users.php      [L,QSA]
+RewriteRule ^admin/community/?$      admin/community.php  [L,QSA]
+RewriteRule ^admin/contact/?$        admin/contact.php    [L,QSA]
+RewriteRule ^admin/reports/?$        admin/reports.php    [L,QSA]
+RewriteRule ^admin/ajax/?$           admin/ajax.php       [L,QSA]
+
+# ─── ข้ามไฟล์/โฟลเดอร์ที่มีอยู่จริง (assets, uploads ฯลฯ) ──────────────────
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TOKEN ROUTE — /tkn/p/{token}  (obfuscated URL)
+# ══════════════════════════════════════════════════════════════════════════════
+RewriteRule ^p/([A-Za-z0-9_\-]+)/?$  router.php?t=$1  [L,QSA]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PARAMETERIZED USER ROUTES
+# ══════════════════════════════════════════════════════════════════════════════
+RewriteRule ^payment/([0-9]+)/?$     pages/payment_page.php?booking_id=$1 [L,QSA]
+RewriteRule ^activity/([0-9]+)/?$    pages/activity.php?id=$1             [L,QSA]
+RewriteRule ^book/([0-9]+)/?$        pages/booking.php?id=$1              [L,QSA]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# STATIC USER ROUTES
+# ══════════════════════════════════════════════════════════════════════════════
+RewriteRule ^$                       pages/home.php             [L]
+RewriteRule ^home/?$                 pages/home.php             [L]
+RewriteRule ^home-en/?$              pages/home_en.php          [L]
+RewriteRule ^login/?$                pages/login.php            [L,QSA]
+RewriteRule ^register/?$             pages/register.php         [L,QSA]
+RewriteRule ^logout/?$               pages/logout.php           [L]
+RewriteRule ^activities/?$           pages/activity.php         [L,QSA]
+RewriteRule ^contact/?$              pages/contact.php          [L,QSA]
+RewriteRule ^billing/?$              pages/billing.php          [L,QSA]
+RewriteRule ^owner-feedback/?$       pages/owner_feedback.php   [L,QSA]
+RewriteRule ^receipt/?$              pages/booking_receipt.php  [L,QSA]
+RewriteRule ^booking-history/?$      pages/dashboard_booking.php [L,QSA]
+RewriteRule ^dashboard/?$            pages/dashboard.php        [L,QSA]
+RewriteRule ^my-shop/?$              pages/dashboard2.php       [L,QSA]
+RewriteRule ^profile/?$              pages/user.php             [L,QSA]
+RewriteRule ^profile/setup/?$        pages/profile-setup.php    [L,QSA]
+RewriteRule ^owner/setup/?$          pages/owner_setup.php      [L,QSA]
+RewriteRule ^owner_setup/?$          pages/owner_setup.php      [L,QSA]
+RewriteRule ^shop/?$                 pages/shop_profile.php     [L,QSA]
+RewriteRule ^community/?$            pages/community.php        [L,QSA]
+
+# ─── API (เปิดให้เรียกได้ปกติ) ────────────────────────────────────────────────
+RewriteRule ^api/(.+)$               api/$1 [L,QSA]

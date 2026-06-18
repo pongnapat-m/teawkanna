@@ -1,0 +1,405 @@
+/* User profile responsive polish. Desktop styles remain unchanged. */
+@media (max-width: 768px) {
+    body {
+        background: #eef3ee;
+        overflow-x: hidden;
+    }
+
+    .main-wrap {
+        width: 100%;
+        margin: 22px auto 42px;
+        padding: 0 clamp(14px, 5vw, 28px);
+    }
+
+    .id-card {
+        max-width: 560px;
+        margin: 0 auto 18px;
+        border-radius: 16px;
+        box-shadow: 0 8px 28px rgba(35, 54, 27, 0.16);
+    }
+
+    .id-card-header {
+        min-height: 58px;
+        padding: 10px 20px;
+        gap: 16px;
+    }
+
+    .id-card-brand {
+        flex: 0 0 auto;
+        font-size: 1rem;
+        letter-spacing: 1.2px;
+    }
+
+    .id-card-title {
+        max-width: 150px;
+        font-size: 0.76rem;
+        line-height: 1.65;
+        letter-spacing: 1.2px;
+    }
+
+    .id-card-body {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .id-avatar {
+        width: 96px;
+        height: 116px;
+        border-radius: 6px;
+    }
+
+    .id-fields {
+        flex: 1 1 0;
+        min-width: 0;
+        gap: 5px;
+        padding-top: 2px;
+        padding-right: 0;
+    }
+
+    .id-field {
+        min-width: 0;
+    }
+
+    .id-field-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(64px, 0.65fr);
+        gap: 8px;
+    }
+
+    .id-field-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.7px;
+    }
+
+    .id-field-value,
+    .id-field-name {
+        display: block;
+        font-size: 0.84rem;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .id-field-name {
+        padding-right: 42px;
+        font-size: 0.94rem;
+    }
+
+    .id-edit-btn {
+        top: 12px;
+        right: 12px;
+        gap: 4px;
+        font-size: 0.7rem;
+    }
+
+    .tab-bar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        margin-bottom: 0;
+        overflow: visible;
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .tab-item {
+        min-width: 0;
+        padding: 14px 5px;
+        font-size: clamp(0.75rem, 3vw, 0.86rem);
+        letter-spacing: 0;
+        white-space: nowrap;
+    }
+
+    .tab-content {
+        padding: 24px 20px 20px;
+    }
+
+    .booking-grid,
+    .wishlist-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 18px;
+        padding: 0;
+    }
+
+    .bk-card,
+    .wishlist-card {
+        width: 100%;
+        border-radius: 14px;
+        box-shadow: 0 5px 18px rgba(33, 62, 38, 0.12);
+    }
+
+    .bk-card:hover,
+    .wishlist-card:hover {
+        transform: none;
+    }
+
+    .bk-img,
+    .wishlist-img {
+        height: clamp(170px, 52vw, 230px);
+    }
+
+    .bk-body,
+    .wishlist-info {
+        padding: 14px 16px 12px;
+    }
+
+    .bk-name,
+    .wishlist-info h3 {
+        font-size: 0.95rem;
+        line-height: 1.45;
+    }
+
+    .bk-meta span,
+    .wl-meta span {
+        align-items: flex-start;
+        font-size: 0.78rem;
+        line-height: 1.5;
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .bk-price,
+    .wl-price {
+        font-size: 1rem;
+    }
+
+    .bk-actions {
+        flex-wrap: wrap;
+        padding: 10px 14px 14px;
+    }
+
+    .bk-btn {
+        min-height: 40px;
+        padding: 9px 12px;
+        font-size: 0.78rem;
+    }
+
+    .wl-footer {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .wl-book-btn {
+        min-height: 36px;
+        padding: 7px 16px;
+    }
+
+    .wl-remove-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .empty-state {
+        padding: 48px 14px;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+    }
+
+    .passport-content {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .passport-toolbar {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .passport-color-bar,
+    .pcb-export-btn {
+        width: 100%;
+        margin: 0;
+        justify-content: center;
+    }
+
+    .passport-color-bar {
+        border-radius: 14px;
+    }
+
+    .pcb-export-btn {
+        min-height: 42px;
+        border-radius: 14px;
+    }
+
+    .flipbook-shell {
+        padding: 10px 42px;
+    }
+
+    .flipbook-arrow {
+        width: 34px;
+        height: 34px;
+        font-size: 1.25rem;
+    }
+
+    .book-spread {
+        height: clamp(350px, 108vw, 440px);
+    }
+
+    .page-inner {
+        padding: 14px 12px 26px;
+    }
+
+    .page-stamp-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .stamp-inner {
+        width: calc(100% - 8px);
+        height: calc(100% - 8px);
+        padding: 4px;
+    }
+
+    .stamp-icon {
+        font-size: 1.55rem;
+    }
+
+    .stamp-name {
+        font-size: 0.62rem;
+    }
+
+    .stamp-loyalty,
+    .stamp-progress,
+    .stamp-count-badge {
+        font-size: 0.52rem;
+    }
+
+    .stamp-catalog-grid {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        overflow-y: auto;
+    }
+
+    .catalog-item {
+        padding: 6px 8px;
+    }
+
+    .cover-name {
+        font-size: 1.08rem;
+    }
+
+    .responsive-footer-line-fab {
+        right: 18px;
+        bottom: 18px;
+        width: 52px;
+        height: 52px;
+        font-size: 24px;
+    }
+
+    #receiptModal,
+    #reviewModal {
+        padding: 14px !important;
+        align-items: center !important;
+    }
+
+    #receiptModal > div,
+    #reviewModal > div {
+        width: 100% !important;
+        max-height: calc(100dvh - 28px) !important;
+        border-radius: 16px !important;
+    }
+
+    #reviewModal > div {
+        overflow-y: auto;
+        padding: 24px 18px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .main-wrap {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .id-card-body {
+        grid-template-columns: 86px minmax(0, 1fr);
+        gap: 11px;
+        padding: 12px;
+    }
+
+    .id-avatar {
+        width: 86px;
+        height: 108px;
+    }
+
+    .id-card-brand {
+        font-size: 0.9rem;
+    }
+
+    .id-card-title {
+        font-size: 0.7rem;
+    }
+
+    .id-field-value,
+    .id-field-name {
+        font-size: 0.78rem;
+    }
+
+    .id-field-name {
+        padding-right: 36px;
+        font-size: 0.86rem;
+    }
+
+    .id-edit-btn {
+        right: 10px;
+        font-size: 0;
+    }
+
+    .id-edit-btn i {
+        font-size: 0.75rem;
+    }
+
+    .tab-content {
+        padding: 20px 12px 16px;
+    }
+
+    .bk-img,
+    .wishlist-img {
+        height: 168px;
+    }
+
+    .bk-actions {
+        flex-direction: column;
+    }
+
+    .bk-btn {
+        width: 100%;
+    }
+
+    .flipbook-shell {
+        padding-right: 34px;
+        padding-left: 34px;
+    }
+
+    .flipbook-arrow {
+        width: 30px;
+        height: 30px;
+    }
+
+    .responsive-footer-line-fab {
+        right: 14px;
+        bottom: 14px;
+    }
+
+    #receiptModal,
+    #reviewModal {
+        padding: 8px !important;
+    }
+
+    #receiptModal > div,
+    #reviewModal > div {
+        max-height: calc(100dvh - 16px) !important;
+        border-radius: 14px !important;
+    }
+
+    #reviewModal .rv-star {
+        font-size: 28px !important;
+    }
+}

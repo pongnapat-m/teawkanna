@@ -1,0 +1,36 @@
+.tkn-global-lang-switch {
+    position: fixed;
+    top: 82px;
+    right: 18px;
+    z-index: 11000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 46px;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 999px;
+    background: #2b4218;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    color: #fff8cb;
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.tkn-global-lang-switch:hover {
+    background: #3d5c25;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .tkn-global-lang-switch {
+        top: 72px;
+        right: 12px;
+        min-width: 42px;
+        height: 36px;
+    }
+}

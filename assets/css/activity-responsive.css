@@ -1,0 +1,380 @@
+/* Activities page responsive polish. Desktop styles remain unchanged. */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+        background: #f5f8f2;
+    }
+
+    .search-section {
+        padding: 34px 0 28px;
+    }
+
+    .search-section > .container,
+    .results-section > .container {
+        width: 100%;
+        padding-right: clamp(16px, 5vw, 28px);
+        padding-left: clamp(16px, 5vw, 28px);
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: 620px;
+        padding: 0;
+    }
+
+    .search-title {
+        max-width: 320px;
+        margin: 0 auto 8px;
+        font-size: clamp(1.35rem, 6vw, 1.7rem);
+        line-height: 1.35;
+    }
+
+    .search-subtitle {
+        max-width: 340px;
+        margin: 0 auto 24px;
+        font-size: 0.82rem;
+        line-height: 1.65;
+    }
+
+    .main-search-bar {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-areas:
+            "icon input input"
+            "filter filter submit";
+        gap: 7px 8px;
+        height: auto;
+        padding: 8px;
+        border-radius: 18px;
+        background: #f0f4eb;
+    }
+
+    .bar-icon {
+        grid-area: icon;
+        align-self: center;
+        margin-left: 9px;
+        font-size: 14px;
+    }
+
+    .main-search-input {
+        grid-area: input;
+        width: 100% !important;
+        min-height: 42px;
+        padding: 0 10px 0 2px !important;
+        font-size: 14px !important;
+    }
+
+    .filter-toggle-btn {
+        grid-area: filter;
+        width: max-content !important;
+        min-height: 42px;
+        padding: 0 13px;
+        border-radius: 12px;
+        background: rgba(43, 66, 24, 0.06);
+    }
+
+    .bar-divider {
+        display: none;
+    }
+
+    .bar-search-btn {
+        grid-area: submit;
+        min-width: 96px;
+        min-height: 42px;
+        margin: 0 !important;
+        justify-content: center;
+        padding: 9px 16px;
+        border-radius: 12px;
+    }
+
+    .clear-filters-btn {
+        min-height: 36px;
+        margin-top: 4px !important;
+    }
+
+    .filter-panel {
+        margin-top: 14px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(43, 66, 24, 0.08);
+    }
+
+    .filter-divider {
+        margin: 0 0 16px;
+    }
+
+    .filter-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 14px;
+    }
+
+    .filter-label {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        line-height: 1.5;
+    }
+
+    .tags-checkbox-group {
+        gap: 8px;
+    }
+
+    .tag-checkbox-item {
+        max-width: 100%;
+        min-height: 36px;
+        padding: 7px 12px;
+        font-size: 0.78rem;
+        line-height: 1.45;
+        white-space: normal;
+    }
+
+    .filter-select,
+    .filter-input {
+        min-height: 44px;
+        font-size: 0.85rem;
+    }
+
+    .results-section {
+        min-height: 420px;
+        padding: 38px 0 52px;
+    }
+
+    .results-header {
+        align-items: flex-start;
+        margin-bottom: 24px;
+        font-size: clamp(1.05rem, 4.8vw, 1.3rem);
+        line-height: 1.5;
+    }
+
+    .results-header::before {
+        flex: 0 0 4px;
+        height: 24px;
+        margin-top: 3px;
+    }
+
+    .activities-list {
+        gap: 22px;
+    }
+
+    .activity-item {
+        width: 100%;
+        max-width: 620px;
+        margin: 0 auto;
+        flex-direction: column !important;
+        border-radius: 18px;
+        box-shadow: 0 7px 24px rgba(43, 66, 24, 0.11);
+    }
+
+    .activity-item:hover {
+        transform: none;
+    }
+
+    .activity-thumbnail {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 9;
+        border-radius: 0;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .activity-thumbnail::after {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.08), transparent 45%);
+    }
+
+    .open-banner,
+    .closed-banner {
+        z-index: 1;
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .activity-details {
+        padding: 16px 18px 18px !important;
+    }
+
+    .activity-header {
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .activity-header > div {
+        min-width: 0;
+    }
+
+    .activity-name {
+        padding-right: 2px;
+        font-size: 1.02rem;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .activity-shop-name {
+        font-size: 0.78rem !important;
+        line-height: 1.45;
+    }
+
+    .activity-rating {
+        flex-wrap: wrap;
+        font-size: 0.78rem;
+    }
+
+    .wl-card-btn {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        font-size: 20px;
+    }
+
+    .activity-description {
+        margin-bottom: 13px;
+        font-size: 0.82rem;
+        line-height: 1.65;
+        -webkit-line-clamp: 3;
+    }
+
+    .activity-meta {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 7px;
+        margin-bottom: 14px;
+        font-size: 0.78rem;
+    }
+
+    .activity-meta span {
+        align-items: flex-start;
+        min-width: 0;
+        line-height: 1.5;
+    }
+
+    .activity-footer {
+        align-items: flex-start;
+        gap: 10px;
+        padding-top: 14px;
+    }
+
+    .activity-price {
+        font-size: 1.25rem;
+    }
+
+    .booking-date-info,
+    .not-open-label {
+        max-width: 100%;
+        font-size: 0.74rem !important;
+        line-height: 1.45;
+        white-space: normal !important;
+    }
+
+    .pagination {
+        gap: 5px;
+        margin: 32px 0 8px;
+    }
+
+    .page-btn {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 9px;
+        font-size: 0.82rem;
+    }
+
+    .no-results {
+        padding: 55px 14px;
+    }
+
+    .no-results i {
+        font-size: 44px;
+    }
+
+    .no-results h3 {
+        font-size: 1.1rem;
+    }
+
+    .no-results p {
+        font-size: 0.85rem;
+    }
+
+    .line-fab {
+        right: 18px !important;
+        bottom: 18px !important;
+        width: 52px !important;
+        height: 52px !important;
+    }
+
+    .line-fab-icon {
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 1.5rem !important;
+    }
+
+    .line-fab:hover {
+        width: 52px !important;
+        transform: none !important;
+    }
+
+    .line-fab-label {
+        display: none !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .search-section > .container,
+    .results-section > .container {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .search-title {
+        max-width: 290px;
+        font-size: 1.35rem;
+    }
+
+    .main-search-bar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "icon input"
+            "filter submit";
+    }
+
+    .filter-toggle-btn {
+        width: 100% !important;
+        justify-content: center;
+        padding: 0 10px;
+    }
+
+    .bar-search-btn {
+        min-width: 92px;
+        padding-right: 13px;
+        padding-left: 13px;
+    }
+
+    .filter-panel {
+        padding: 14px 12px;
+    }
+
+    .activity-thumbnail {
+        aspect-ratio: 4 / 3;
+    }
+
+    .activity-details {
+        padding: 15px 14px 16px !important;
+    }
+
+    .activity-footer {
+        flex-direction: column;
+    }
+
+    .activity-price,
+    .booking-date-info,
+    .not-open-label {
+        width: 100%;
+    }
+
+    .line-fab {
+        right: 14px !important;
+        bottom: 14px !important;
+    }
+}
