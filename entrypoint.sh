@@ -16,6 +16,10 @@ echo "Configuring Apache to listen on port $PORT..."
 sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:$PORT>/g" /etc/apache2/sites-available/000-default.conf
 
+# Inject AllowOverride All for /var/www/html inside the VirtualHost config to enable .htaccess
+echo "Injecting AllowOverride All for /var/www/html..."
+sed -i "s|<\/VirtualHost>|<Directory /var/www/html>\n    Options Indexes FollowSymLinks\n    AllowOverride All\n    Require all granted\n<\/Directory>\n<\/VirtualHost>|g" /etc/apache2/sites-available/000-default.conf
+
 # Run the default apache2-foreground command
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
