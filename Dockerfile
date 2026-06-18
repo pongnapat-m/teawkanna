@@ -6,6 +6,7 @@ RUN a2enmod mpm_prefork
 
 # Debug: Print enabled MPM modules during build
 RUN ls -la /etc/apache2/mods-enabled/ | grep mpm
+RUN grep -r "LoadModule" /etc/apache2/
 
 # Enable mod_rewrite and mod_headers
 RUN a2enmod rewrite headers
