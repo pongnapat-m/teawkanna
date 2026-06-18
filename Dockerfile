@@ -4,10 +4,6 @@ FROM php:8.2-apache
 RUN a2dismod mpm_event mpm_worker || true
 RUN a2enmod mpm_prefork
 
-# Debug: Print enabled MPM modules during build
-RUN ls -la /etc/apache2/mods-enabled/ | grep mpm
-RUN grep -r "LoadModule" /etc/apache2/
-
 # Enable mod_rewrite and mod_headers
 RUN a2enmod rewrite headers
 
@@ -28,3 +24,8 @@ RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
+
+# Setup entrypoint script to prevent MPM conflicts at runtime
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
