@@ -4,36 +4,10 @@ if (isset($_GET['debug_db'])) {
     require_once __DIR__ . '/../db.php';
     require_once __DIR__ . '/../config/route.php';
     
-    $token = 'Skltb2sySUoyM2pJYkRzY3l4b0p3TDd3L0VNTmpwYjk2andlT2xmT3BiUT0';
-    $decoded = decodeToken($token);
-    
-    $result = [
-        'decoded_token' => $decoded,
-        'activity' => null,
-        'open_requests' => [],
-        'bookings' => []
-    ];
-    
-    if ($decoded && isset($decoded['id'])) {
-        $id = (int)$decoded['id'];
-        
-        $stmt = $conn->prepare("SELECT activity_id, activity_name, max_capacity, status FROM activity WHERE activity_id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result['activity'] = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-        
-        $stmt = $conn->prepare("SELECT * FROM activity_open_request WHERE new_activity_id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result['open_requests'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
-        
-        $stmt = $conn->prepare("SELECT booking_id, booking_date, status, adult_quantity, kid_quantity FROM booking WHERE activity_id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result['bookings'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
+    $result = [];
+    $q = $conn->query("SHOW COLUMNS FROM booking");
+    while ($r = $q->fetch_assoc()) {
+        $result[] = $r;
     }
     echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
