@@ -43,7 +43,7 @@ function nav_item(string $href, string $label, string $page, string $current, in
     <div class="sb-section">General</div>
 
     <!-- Dashboard -->
-    <a class="sb-item <?= $current_page === 'dashboard' ? 'active' : '' ?>" href="/tkn/admin">
+    <a class="sb-item <?= $current_page === 'dashboard' ? 'active' : '' ?>" href="/tkn/admin/">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect x="3" y="3" width="7" height="7" />
             <rect x="14" y="3" width="7" height="7" />

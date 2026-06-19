@@ -58,20 +58,13 @@ if ($action === 'update_status') {
         echo json_encode(['ok'=>false,'msg'=>"ไม่สามารถเปลี่ยนจาก {$row['status']} → {$new_status} ได้"]); exit();
     }
 
-    // ── ตรวจสอบ ENUM ก่อน transaction (DDL ต้องอยู่นอก transaction เสมอ) ──
-    // ถ้า ENUM มีครบแล้ว MySQL จะไม่ rebuild table → ไม่ lock
-    $enum_check = $conn->query("
-        SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'booking' AND COLUMN_NAME = 'status'
-        LIMIT 1
-    ");
-    $enum_row = $enum_check ? $enum_check->fetch_assoc() : null;
-    if ($enum_row && strpos($enum_row['COLUMN_TYPE'], 'PendingReview') === false) {
-        $conn->query("ALTER TABLE booking MODIFY COLUMN status ENUM('Pending','PendingReview','Paid','Completed','Cancel','Rejected') NOT NULL DEFAULT 'Pending'");
-    }
-
     $conn->begin_transaction();
     try {
+        // ── ตรวจสอบ enum ให้ครบ (ต้องตรงกับ payment_slip_upload.php และ user.php) ──
+        $conn->query("
+            ALTER TABLE booking
+            MODIFY COLUMN status ENUM('Pending','PendingReview','Paid','Completed','Cancel','Rejected') NOT NULL DEFAULT 'Pending'
+        ");
 
         // อัปเดต booking status
         $u = $conn->prepare("UPDATE booking SET status=? WHERE booking_id=?");
