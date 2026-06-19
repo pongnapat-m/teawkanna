@@ -1,17 +1,4 @@
 <?php
-if (isset($_GET['debug_db'])) {
-    header('Content-Type: application/json; charset=utf-8');
-    require_once __DIR__ . '/../db.php';
-    require_once __DIR__ . '/../config/route.php';
-    
-    $result = [];
-    $q = $conn->query("SHOW COLUMNS FROM booking");
-    while ($r = $q->fetch_assoc()) {
-        $result[] = $r;
-    }
-    echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    exit;
-}
 require_once __DIR__ . '/../config/env.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 error_reporting(E_ALL);
