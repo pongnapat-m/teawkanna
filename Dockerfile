@@ -45,6 +45,7 @@ RUN chmod -R 777 /var/www/html/tkn/handlers/uploads
 
 # Setup entrypoint script to prevent MPM conflicts at runtime
 COPY entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Expose port 8080 (Railway sets PORT=8080 by default)
