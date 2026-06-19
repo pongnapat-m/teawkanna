@@ -4,16 +4,21 @@
 */
 
 // นับ badge notifications
-$nav_pend_owners    = (int)($conn->query("SELECT COUNT(*) FROM owner WHERE status='Pending'")->fetch_row()[0] ?? 0);
-$nav_pend_acts      = (int)($conn->query("SELECT COUNT(*) FROM activity_open_request WHERE status='Pending'")->fetch_row()[0] ?? 0);
-$nav_pend_bookings  = (int)($conn->query("SELECT COUNT(*) FROM booking WHERE status='Pending'")->fetch_row()[0] ?? 0);
-// Payments badge: นับเฉพาะสลิปที่ต้องการ admin review (ไม่นับ Omise auto-process และไม่นับ booking pending)
-$nav_pend_payments  = (int)($conn->query("
-    SELECT COUNT(*) FROM payment
-    WHERE status = 'PendingReview'
-    AND (payment_method NOT LIKE '%omise%' OR payment_method IS NULL)
-")->fetch_row()[0] ?? 0);
-$nav_unread_msgs    = (int)($conn->query("SELECT COUNT(*) FROM contact_message WHERE is_read = 0")->fetch_row()[0] ?? 0);
+// นับ badge notifications
+$nav_stats_q = $conn->query("
+    SELECT 
+        (SELECT COUNT(*) FROM owner WHERE status='Pending') AS pend_owners,
+        (SELECT COUNT(*) FROM activity_open_request WHERE status='Pending') AS pend_acts,
+        (SELECT COUNT(*) FROM booking WHERE status='Pending') AS pend_bookings,
+        (SELECT COUNT(*) FROM payment WHERE status = 'PendingReview' AND (payment_method NOT LIKE '%omise%' OR payment_method IS NULL)) AS pend_payments,
+        (SELECT COUNT(*) FROM contact_message WHERE is_read = 0) AS unread_msgs
+")->fetch_assoc();
+
+$nav_pend_owners   = (int)($nav_stats_q['pend_owners'] ?? 0);
+$nav_pend_acts     = (int)($nav_stats_q['pend_acts'] ?? 0);
+$nav_pend_bookings = (int)($nav_stats_q['pend_bookings'] ?? 0);
+$nav_pend_payments = (int)($nav_stats_q['pend_payments'] ?? 0);
+$nav_unread_msgs   = (int)($nav_stats_q['unread_msgs'] ?? 0);
 $nav_total_notifs   = $nav_pend_owners + $nav_pend_acts + $nav_pend_bookings + $nav_pend_payments;
 
 function nav_item(string $href, string $label, string $page, string $current, int $badge = 0, string $icon = ''): void {

@@ -12,19 +12,29 @@ $current_page = 'dashboard';
 
 /* ── Stats ─────────────────────────────────────────────── */
 $stats = [];
-$stats['users']      = $conn->query("SELECT COUNT(*) FROM user")->fetch_row()[0] ?? 0;
-$stats['owners']     = $conn->query("SELECT COUNT(*) FROM owner")->fetch_row()[0] ?? 0;
-$stats['activities'] = $conn->query("SELECT COUNT(*) FROM activity")->fetch_row()[0] ?? 0;
-$stats['bookings']   = $conn->query("SELECT COUNT(*) FROM payment WHERE status='PendingReview'")->fetch_row()[0] ?? 0;
 $thisYM = date('Y-m');
-$rev_row = $conn->query("SELECT COALESCE(SUM(amount),0) AS total FROM payment WHERE status='Approved' AND DATE_FORMAT(payment_date,'%Y-%m')='{$thisYM}'")->fetch_row();
-$stats['monthly_revenue'] = (float)($rev_row[0] ?? 0);
+$stats_q = $conn->query("
+    SELECT 
+        (SELECT COUNT(*) FROM user) AS users,
+        (SELECT COUNT(*) FROM owner) AS owners,
+        (SELECT COUNT(*) FROM activity) AS activities,
+        (SELECT COUNT(*) FROM payment WHERE status='PendingReview') AS bookings,
+        (SELECT COALESCE(SUM(amount),0) FROM payment WHERE status='Approved' AND DATE_FORMAT(payment_date,'%Y-%m')='{$thisYM}') AS monthly_revenue,
+        (SELECT COUNT(*) FROM review) AS reviews,
+        (SELECT COUNT(*) FROM activity_open_request WHERE status='Pending') AS activity_open_request
+")->fetch_assoc();
+
+$stats['users']      = (int)($stats_q['users'] ?? 0);
+$stats['owners']     = (int)($stats_q['owners'] ?? 0);
+$stats['activities'] = (int)($stats_q['activities'] ?? 0);
+$stats['bookings']   = (int)($stats_q['bookings'] ?? 0);
+$stats['monthly_revenue'] = (float)($stats_q['monthly_revenue'] ?? 0);
+$stats['reviews']    = (int)($stats_q['reviews'] ?? 0);
+$stats['activity_open_request'] = (int)($stats_q['activity_open_request'] ?? 0);
 
 /* ── Pending (for notifications) ───────────────────────── */
 $pend_owners_q = $conn->query("SELECT owner_id,owner_fullname FROM owner WHERE status='Pending' ORDER BY owner_id DESC LIMIT 10");
 $pend_owners   = $pend_owners_q->fetch_all(MYSQLI_ASSOC);
-
-$stats['activity_open_request'] = $conn->query("SELECT COUNT(*) FROM activity_open_request WHERE status='Pending'")->fetch_row()[0] ?? 0;
 
 
 $pend_act_q = $conn->query("SELECT r.request_id, a.activity_id, a.activity_name, s.shop_name FROM activity_open_request r JOIN activity a ON r.activity_id=a.activity_id JOIN shop s ON r.shop_id=s.shop_id WHERE r.status='Pending' ORDER BY r.requested_at DESC LIMIT 10");
@@ -80,7 +90,6 @@ $recent_reviews_q = $conn->query(
      ORDER BY r.created_at DESC LIMIT 20"
 );
 $recent_reviews = $recent_reviews_q ? $recent_reviews_q->fetch_all(MYSQLI_ASSOC) : [];
-$stats['reviews'] = (int)($conn->query("SELECT COUNT(*) FROM review")->fetch_row()[0] ?? 0);
 
 include 'head.php';
 include 'nav.php';
