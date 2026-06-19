@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (isset($_SESSION['user_id'])) {
     if      ($_SESSION['role'] === 'owner') { header("Location: /tkn/dashboard");      exit(); }
-    elseif  ($_SESSION['role'] === 'admin') { header("Location: /tkn/admin"); exit(); }
+    elseif  ($_SESSION['role'] === 'admin') { header("Location: /tkn/admin/"); exit(); }
     else                                    { header("Location: /tkn/home");            exit(); }
 }
 $saved_username = $_POST['username'] ?? '';
@@ -337,7 +337,7 @@ if (isset($_POST['submit_btn'])) {
             $_SESSION['fullname']   = 'Admin';
             $_SESSION['role']       = 'admin';
             $_SESSION['admin_role'] = $row['role'];
-            echo "<script>Swal.fire({ icon:'success', title:'เข้าสู่ระบบสำเร็จ', text:'ยินดีต้อนรับ Admin', showConfirmButton:false, timer:1500 }).then(()=>{ window.location.href='/tkn/admin'; });</script>";
+            echo "<script>Swal.fire({ icon:'success', title:'เข้าสู่ระบบสำเร็จ', text:'ยินดีต้อนรับ Admin', showConfirmButton:false, timer:1500 }).then(()=>{ window.location.href='/tkn/admin/'; });</script>";
         } else { $stmt->close(); }
     }
 
