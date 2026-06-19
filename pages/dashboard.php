@@ -140,8 +140,8 @@ if ($shop_id) {
          JOIN activity a ON b.activity_id = a.activity_id
          WHERE a.shop_id = ? AND b.status = 'Paid'
            AND DATE(b.booking_date) >= CURDATE()
-         GROUP BY a.activity_id, DATE(b.booking_date)
-         ORDER BY b.booking_date ASC LIMIT 5"
+          GROUP BY a.activity_id, a.activity_name, b.booking_date
+          ORDER BY b.booking_date ASC LIMIT 5"
     );
     $events_stmt->bind_param("i", $shop_id);
     $events_stmt->execute();
