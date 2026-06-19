@@ -98,21 +98,13 @@ if ($pay_option === 'now' && $payment_method === 'mobile' && empty($bank_name)) 
     exit;
 }
 
-// ── ดึง activity เพื่อตรวจสอบ ─────────────────────────────────────────────────
-$chk = $conn->prepare("
-    SELECT a.activity_id, a.adult_price, a.kid_price,
-           a.max_capacity, a.status,
-            COALESCE(SUM(CASE WHEN (b.status IN ('Paid','PendingReview','Completed') OR (b.status = 'Pending' AND (b.payment_deadline IS NULL OR b.payment_deadline >= NOW()))) AND DATE(b.booking_date)=? THEN b.adult_quantity+b.kid_quantity ELSE 0 END),0) AS used_pax
-    FROM   activity a
-    LEFT JOIN booking b ON a.activity_id = b.activity_id
-    WHERE  a.activity_id = ?
-    GROUP BY a.activity_id
-    FOR UPDATE
-");
-$chk->bind_param("si", $travel_date, $activity_id);
-$chk->execute();
-$act = $chk->get_result()->fetch_assoc();
-$chk->close();
+// ── ดึง activity (pre-check ก่อน transaction) ────────────────────────────────
+// ตรวจสอบ activity + open_request ก่อนเริ่ม transaction (ไม่ต้องล็อค)
+$pre_chk = $conn->prepare("SELECT activity_id, adult_price, kid_price, max_capacity, status FROM activity WHERE activity_id = ?");
+$pre_chk->bind_param('i', $activity_id);
+$pre_chk->execute();
+$act = $pre_chk->get_result()->fetch_assoc();
+$pre_chk->close();
 
 if (!$act) {
     echo json_encode(['status' => 'error', 'message' => 'ไม่พบกิจกรรมนี้']);
@@ -125,7 +117,7 @@ if ($act['status'] !== 'Active') {
 
 // ตรวจสอบช่วงวันที่จาก activity_open_request
 $req_stmt = $conn->prepare(
-    "SELECT requested_start_date, requested_end_date
+    "SELECT requested_start_date, requested_end_date, note
      FROM activity_open_request
      WHERE new_activity_id = ? AND status = 'Approved'
      ORDER BY requested_start_date ASC
@@ -163,20 +155,15 @@ if (!empty($open_recurring['days'])) {
     }
 }
 
-// เช็ค capacity เฉพาะวันที่เลือก (per-date) ป้องกัน overbooking รายวัน
-$remaining    = (int)$act['max_capacity'] - (int)$act['used_pax'];
-$total_people = $adult_qty + $kid_qty;
-if ($remaining < $total_people) {
-    echo json_encode([
-        'status'  => 'error',
-        'message' => "ที่นั่งไม่พอ (เหลือ {$remaining} ที่) กรุณาลดจำนวนผู้เข้าร่วม"
-    ]);
-    exit;
-}
+// ดึงราคาสำหรับคำนวณ (จาก pre-check ข้างบน ไม่ต้อง query ซ้ำ)
+$adult_price_check = (float)$act['adult_price'];
+$kid_price_check   = (float)$act['kid_price'];
+$max_cap_check     = (int)$act['max_capacity'];
+$total_people      = $adult_qty + $kid_qty;
 
 // ── คำนวณราคา server-side (ไม่ trust client total) ───────────────────────────
-$adult_price   = (float)$act['adult_price'];
-$kid_price     = (float)$act['kid_price'];
+$adult_price   = $adult_price_check;
+$kid_price     = $kid_price_check;
 $correct_total = ($adult_qty * $adult_price) + ($kid_qty * $kid_price);
 $original_total = $correct_total;
 $discount_amount = 0.0;
@@ -219,14 +206,41 @@ if ($promotion_id > 0) {
     $correct_total = round($original_total - $discount_amount, 2);
 }
 
-// ── Transaction: insert booking + update capacity ─────────────────────────────
-// For now/pay-now flow, booking is marked Pending until payment confirmation (mobile/QR) completes.
+// ── Transaction: insert booking พร้อม lock capacity ──────────────────────────
 $status = 'Pending';
 $payment_deadline = ($pay_option === 'later') ? date('Y-m-d H:i:s', strtotime('+2 days')) : date('Y-m-d H:i:s', strtotime('+30 minutes'));
 $promotion_db_id = $promotion_id > 0 ? $promotion_id : null;
 
 $conn->begin_transaction();
 try {
+    // ── ล็อค activity row + ตรวจ capacity อีกครั้งใน transaction (กัน race condition) ──
+    $lock_chk = $conn->prepare("
+        SELECT a.max_capacity,
+               COALESCE(SUM(
+                   CASE WHEN (
+                       b.status IN ('Paid','PendingReview','Completed')
+                       OR (b.status = 'Pending' AND (b.payment_deadline IS NULL OR b.payment_deadline >= NOW()))
+                   ) AND DATE(b.booking_date) = ? THEN b.adult_quantity + b.kid_quantity ELSE 0 END
+               ), 0) AS used_pax
+        FROM activity a
+        LEFT JOIN booking b ON a.activity_id = b.activity_id
+        WHERE a.activity_id = ?
+        GROUP BY a.activity_id
+        FOR UPDATE
+    ");
+    $lock_chk->bind_param('si', $travel_date, $activity_id);
+    $lock_chk->execute();
+    $locked = $lock_chk->get_result()->fetch_assoc();
+    $lock_chk->close();
+
+    if (!$locked) {
+        throw new RuntimeException('ไม่พบกิจกรรมนี้');
+    }
+    $remaining_locked = (int)$locked['max_capacity'] - (int)$locked['used_pax'];
+    if ($remaining_locked < $total_people) {
+        throw new RuntimeException("ที่นั่งไม่เพียงพอ (เหลือ {$remaining_locked} ที่) กรุณาลดจำนวนผู้เข้าร่วม");
+    }
+
     // Insert booking
     $ins = $conn->prepare("
         INSERT INTO booking
@@ -277,7 +291,7 @@ try {
         $usage->close();
     }
 
-    // ไม่หัก capacity_remaining ที่นี่ — จะหักเมื่อ admin อนุมัติ payment เท่านั้น
+    // ไม่หัก capacity_remaining ที่นี่ — ใช้การนับจาก booking table โดยตรง (per-date query)
 
     $conn->commit();
 
