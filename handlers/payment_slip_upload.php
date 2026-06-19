@@ -80,7 +80,7 @@ if (empty($_FILES['slip']) || $_FILES['slip']['error'] !== UPLOAD_ERR_OK) {
 }
 
 // [แก้ไขจุดที่ 1] ย้ายตำแหน่งเซฟ debug.log เข้าไปในโฟลเดอร์ slips ที่ได้รับสิทธิ์เขียนเขียนได้
-file_put_contents(SLIP_UPLOAD_DIR . 'debug.log', date('Y-m-d H:i:s') . " - File validation passed\n", FILE_APPEND);
+file_put_contents($upload_dir . 'debug.log', date('Y-m-d H:i:s') . " - File validation passed\n", FILE_APPEND);
 
 // ── Verify payment belongs to this user ──────────────────────────────────────
 $pq = $conn->prepare(
@@ -123,23 +123,15 @@ if ($_FILES['slip']['size'] > MAX_FILE_SIZE) {
 }
 
 // ── Save file ─────────────────────────────────────────────────────────────────
-// [แก้ไขจุดที่ 2] ใช้สิทธิ์ 0775 ให้สอดคล้องกับ Dockerfile และใช้ @ เพื่อระงับ Warning เผื่อกรณีชนกันในการเข้าถึงโฟลเดอร์
-if (!is_dir(SLIP_UPLOAD_DIR)) {
-    @mkdir(SLIP_UPLOAD_DIR, 0775, true);
+// หา absolute path ของ upload directory โดยอิงจาก __DIR__ ปัจจุบันของไฟล์
+$upload_dir = dirname(__DIR__) . '/uploads/slips/';
+if (!is_dir($upload_dir)) {
+    @mkdir($upload_dir, 0777, true);
 }
-
-// [แก้ไขจุดที่ 3] คอมเมนต์ปิดการเช็ค is_writable เนื่องจากระบบตรวจจับของ PHP มักจะเพี้ยนเวลาทำงานบน Linux Container 
-// ปล่อยให้ move_uploaded_file เป็นตัวเขียนไฟล์โดยตรง
-/*
-if (!is_writable(SLIP_UPLOAD_DIR)) {
-    echo json_encode(['status' => 'error', 'message' => 'โฟลเดอร์ uploads/slips/ ไม่มีสิทธิ์เขียน กรุณา chmod 755 uploads/slips/']);
-    exit;
-}
-*/
 
 $ext      = pathinfo($_FILES['slip']['name'], PATHINFO_EXTENSION) ?: 'jpg';
 $filename = 'slip_' . $payment_id . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-$filepath = SLIP_UPLOAD_DIR . $filename;
+$filepath = $upload_dir . $filename;
 $file_url = SLIP_URL_BASE . $filename;
 
 if (!move_uploaded_file($_FILES['slip']['tmp_name'], $filepath)) {
@@ -169,7 +161,7 @@ $upd_b->close();
 $conn->query("UPDATE booking SET status='PendingReview' WHERE status='' AND booking_id IN (SELECT booking_id FROM payment WHERE slip_image IS NOT NULL AND slip_image != '')");
 
 // [แก้ไขจุดที่ 4] ย้ายตำแหน่งเซฟ debug.log เข้าไปในโฟลเดอร์ slips เช่นกัน
-file_put_contents(SLIP_UPLOAD_DIR . 'debug.log', date('Y-m-d H:i:s') . " - Payment updated\n", FILE_APPEND);
+file_put_contents($upload_dir . 'debug.log', date('Y-m-d H:i:s') . " - Payment updated\n", FILE_APPEND);
 
 // ── Send Twilio SMS notifications ─────────────────────────────────────────────
 $booking_id    = (int)$payment['booking_id'];
