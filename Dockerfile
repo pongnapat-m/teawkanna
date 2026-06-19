@@ -36,4 +36,8 @@ RUN find /var/www/html -type f -exec chmod 644 {} \;
 # Setup entrypoint script to prevent MPM conflicts at runtime
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Expose port 8080 (Railway sets PORT=8080 by default)
+EXPOSE 8080
+
 ENTRYPOINT ["/entrypoint.sh"]
