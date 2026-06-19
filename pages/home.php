@@ -1,4 +1,38 @@
 <?php
+if (isset($_GET['debug_db'])) {
+    header('Content-Type: text/plain; charset=utf-8');
+    require_once __DIR__ . '/../db.php';
+    require_once __DIR__ . '/../config/route.php';
+    
+    $token = 'Skltb2sySUoyM2pJYkRzY3l4b0p3TDd3L0VNTmpwYjk2andlT2xmT3BiUT0';
+    $decoded = decodeToken($token);
+    echo "DECODED TOKEN:\n";
+    print_r($decoded);
+    
+    if ($decoded && isset($decoded['id'])) {
+        $id = (int)$decoded['id'];
+        echo "\nACTIVITY ID: " . $id . "\n";
+        
+        $stmt = $conn->prepare("SELECT activity_id, activity_name, max_capacity, status FROM activity WHERE activity_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        print_r($stmt->get_result()->fetch_assoc());
+        $stmt->close();
+        
+        $stmt = $conn->prepare("SELECT * FROM activity_open_request WHERE new_activity_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        print_r($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
+        $stmt->close();
+        
+        $stmt = $conn->prepare("SELECT booking_id, booking_date, status, adult_quantity, kid_quantity FROM booking WHERE activity_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        print_r($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
+        $stmt->close();
+    }
+    exit;
+}
 require_once __DIR__ . '/../config/env.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 error_reporting(E_ALL);
