@@ -60,11 +60,10 @@ if ($action === 'update_status') {
 
     $conn->begin_transaction();
     try {
-        // ── ถ้า booking.status ยังไม่มี 'Completed' ใน enum ให้ ALTER ก่อน ──
-        // (ทำครั้งเดียว ถ้า enum ถูกต้องแล้ว MySQL จะ skip โดยไม่ error)
+        // ── ตรวจสอบ enum ให้ครบ (ต้องตรงกับ payment_slip_upload.php และ user.php) ──
         $conn->query("
             ALTER TABLE booking
-            MODIFY COLUMN status ENUM('Pending','Paid','Completed','Cancel') NOT NULL
+            MODIFY COLUMN status ENUM('Pending','PendingReview','Paid','Completed','Cancel','Rejected') NOT NULL DEFAULT 'Pending'
         ");
 
         // อัปเดต booking status
