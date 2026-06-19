@@ -16,8 +16,8 @@
 
 // Prevent any output before JSON response
 ob_start();
-error_reporting(0);
-ini_set('display_errors', 0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 session_start();
 header('Content-Type: application/json; charset=utf-8');
@@ -135,7 +135,17 @@ $filepath = $upload_dir . $filename;
 $file_url = SLIP_URL_BASE . $filename;
 
 if (!move_uploaded_file($_FILES['slip']['tmp_name'], $filepath)) {
-    echo json_encode(['status' => 'error', 'message' => 'บันทึกไฟล์ล้มเหลว']);
+    $err = error_get_last();
+    echo json_encode([
+        'status' => 'error', 
+        'message' => 'บันทึกไฟล์ล้มเหลว', 
+        'debug' => [
+            'filepath' => $filepath,
+            'is_dir' => is_dir($upload_dir),
+            'is_writable' => is_writable($upload_dir),
+            'php_error' => $err['message'] ?? 'No PHP error'
+        ]
+    ]);
     exit;
 }
 
