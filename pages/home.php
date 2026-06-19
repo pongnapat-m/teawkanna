@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/env.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
-include '../db.php';
-$conn->query("UPDATE booking SET payment_deadline = '2026-06-19 00:00:00' WHERE status = 'Pending' AND payment_deadline IS NULL");
 error_reporting(E_ALL);
 ini_set('display_errors', APP_DEBUG ? '1' : '0');
 
