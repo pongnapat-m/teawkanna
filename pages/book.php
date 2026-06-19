@@ -102,7 +102,7 @@ if ($pay_option === 'now' && $payment_method === 'mobile' && empty($bank_name)) 
 $chk = $conn->prepare("
     SELECT a.activity_id, a.adult_price, a.kid_price,
            a.max_capacity, a.status,
-            COALESCE(SUM(CASE WHEN (b.status = 'Paid' OR (b.status IN ('Pending','PendingReview') AND (b.payment_deadline IS NULL OR b.payment_deadline >= NOW()))) AND DATE(b.booking_date)=? THEN b.adult_quantity+b.kid_quantity ELSE 0 END),0) AS used_pax
+            COALESCE(SUM(CASE WHEN (b.status IN ('Paid','PendingReview','Completed') OR (b.status = 'Pending' AND (b.payment_deadline IS NULL OR b.payment_deadline >= NOW()))) AND DATE(b.booking_date)=? THEN b.adult_quantity+b.kid_quantity ELSE 0 END),0) AS used_pax
     FROM   activity a
     LEFT JOIN booking b ON a.activity_id = b.activity_id
     WHERE  a.activity_id = ?

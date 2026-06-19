@@ -310,7 +310,7 @@ if ($is_expired) {
 // คำนวณที่นั่งรายวัน (per-date) → ใช้แสดงบน calendar + JS validation
 $per_date_stmt = $conn->prepare("
     SELECT DATE(booking_date) AS bdate,
-           COALESCE(SUM(CASE WHEN (status = 'Paid' OR (status IN ('Pending','PendingReview') AND (payment_deadline IS NULL OR payment_deadline >= NOW()))) THEN adult_quantity+kid_quantity ELSE 0 END),0) AS used_pax
+           COALESCE(SUM(CASE WHEN (status IN ('Paid','PendingReview','Completed') OR (status = 'Pending' AND (payment_deadline IS NULL OR payment_deadline >= NOW()))) THEN adult_quantity+kid_quantity ELSE 0 END),0) AS used_pax
     FROM booking
     WHERE activity_id = ?
     GROUP BY DATE(booking_date)
