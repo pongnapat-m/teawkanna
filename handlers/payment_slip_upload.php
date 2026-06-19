@@ -35,7 +35,7 @@ define('TWILIO_FROM_NUMBER', '+15551234567');                       // ← Twili
 define('ADMIN_PHONE',        '+66812345678');                       // ← เบอร์ admin ไทย
 
 // Upload dir (เปลี่ยนตาม path จริง)
-define('SLIP_UPLOAD_DIR', __DIR__ . '/uploads/slips/');
+define('SLIP_UPLOAD_DIR', '/var/www/html/tkn/handlers/uploads/slips/');
 define('SLIP_URL_BASE',   'uploads/slips/');
 
 // Max file size (5 MB)
