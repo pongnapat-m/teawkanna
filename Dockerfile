@@ -28,10 +28,20 @@ RUN echo '<?php header("Location: /tkn/"); exit;' > /var/www/html/index.php
 # Add index.php to /tkn/ so DirectoryIndex resolves; chdir to pages/ so relative includes work
 RUN echo '<?php chdir(__DIR__ . "/pages"); require __DIR__ . "/pages/home.php";' > /var/www/html/tkn/index.php
 
+# Pre-create all upload directories so PHP never needs to mkdir() at runtime
+# (runtime mkdir() fails because www-data cannot create dirs in a root-owned tree)
+RUN mkdir -p /var/www/html/tkn/handlers/uploads/slips \
+            /var/www/html/tkn/handlers/uploads/shop_pics \
+            /var/www/html/tkn/handlers/uploads/avatars \
+            /var/www/html/tkn/handlers/uploads/activity_pics
+
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN find /var/www/html -type d -exec chmod 755 {} \;
 RUN find /var/www/html -type f -exec chmod 644 {} \;
+
+# Make upload directories writable by www-data (Apache process)
+RUN chmod -R 775 /var/www/html/tkn/handlers/uploads
 
 # Setup entrypoint script to prevent MPM conflicts at runtime
 COPY entrypoint.sh /entrypoint.sh
