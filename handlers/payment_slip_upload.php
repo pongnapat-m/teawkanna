@@ -79,6 +79,9 @@ if (empty($_FILES['slip']) || $_FILES['slip']['error'] !== UPLOAD_ERR_OK) {
     exit;
 }
 
+// หา absolute path ของ upload directory โดยอิงจาก __DIR__ ปัจจุบันของไฟล์
+$upload_dir = dirname(__DIR__) . '/uploads/slips/';
+
 // [แก้ไขจุดที่ 1] ย้ายตำแหน่งเซฟ debug.log เข้าไปในโฟลเดอร์ slips ที่ได้รับสิทธิ์เขียนเขียนได้
 file_put_contents($upload_dir . 'debug.log', date('Y-m-d H:i:s') . " - File validation passed\n", FILE_APPEND);
 
@@ -123,8 +126,6 @@ if ($_FILES['slip']['size'] > MAX_FILE_SIZE) {
 }
 
 // ── Save file ─────────────────────────────────────────────────────────────────
-// หา absolute path ของ upload directory โดยอิงจาก __DIR__ ปัจจุบันของไฟล์
-$upload_dir = dirname(__DIR__) . '/uploads/slips/';
 if (!is_dir($upload_dir)) {
     @mkdir($upload_dir, 0777, true);
 }
