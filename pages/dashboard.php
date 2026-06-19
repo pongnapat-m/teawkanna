@@ -122,9 +122,12 @@ if ($shop_id) {
          JOIN user u ON c.user_id = u.user_id
          WHERE c.status = 'Pending' LIMIT 5"
     );
-    $comp_stmt->execute();
-    $notif_complaints = $comp_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    $comp_stmt->close();
+    $notif_complaints = [];
+    if ($comp_stmt) {
+        $comp_stmt->execute();
+        $notif_complaints = $comp_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $comp_stmt->close();
+    }
 
     $total_notifs = count($notif_bookings) + count($notif_complaints);
 

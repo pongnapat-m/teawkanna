@@ -26,7 +26,10 @@ if ($shop_id) {
     $nb->bind_param("i",$shop_id); $nb->execute();
     $notif_bookings = $nb->get_result()->fetch_all(MYSQLI_ASSOC); $nb->close();
     $nc = $conn->prepare("SELECT c.complaint_id,c.topic,u.fullname FROM complaint c JOIN user u ON c.user_id=u.user_id WHERE c.status='Pending' LIMIT 5");
-    $nc->execute(); $notif_complaints = $nc->get_result()->fetch_all(MYSQLI_ASSOC); $nc->close();
+    $notif_complaints = [];
+    if ($nc) {
+        $nc->execute(); $notif_complaints = $nc->get_result()->fetch_all(MYSQLI_ASSOC); $nc->close();
+    }
     $total_notifs = count($notif_bookings) + count($notif_complaints);
 }
 
