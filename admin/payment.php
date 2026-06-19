@@ -8,20 +8,15 @@ include '../db.php';
 
 // ── Helper: แปลง slip_image path ให้ถูกต้องเสมอ ────────────────────────────
 // DB เก็บ path แบบ 'uploads/slips/...' (relative จาก handlers/)
-// ใช้ absolute URL /tkn/handlers/uploads/slips/ เพื่อให้เข้าถึงได้จากทุกหน้า
+// ใช้ resolvePic() จาก config/url.php เพื่อให้แน่ใจว่าแปลง path ตรงกับระบบรูปส่วนอื่นๆ
 function slipUrl(string $path): string {
     if (empty($path)) return '';
-    if (str_starts_with($path, 'http')) return $path;       // absolute URL → ใช้ตรง
-    // ลบ prefix ซ้ำออก แล้วต่อ absolute path
-    $clean = ltrim($path, '/');
-    if (str_starts_with($clean, 'handlers/')) {
-        return '/tkn/' . $clean;
+    if (function_exists('resolvePic')) {
+        return resolvePic($path);
     }
-    if (str_starts_with($clean, 'uploads/')) {
-        return '/tkn/handlers/' . $clean;
-    }
-    // หากมีแค่ชื่อไฟล์ตรงๆ ให้ต่อ URL ไปยัง directory อัปโหลดหลัก
-    return '/tkn/handlers/uploads/slips/' . basename($clean);
+    // Fallback logic
+    if (str_starts_with($path, 'http')) return $path;
+    return '/tkn/handlers/' . ltrim($path, '/');
 }
 
 // ── Auth check ───────────────────────────────────────────────────────────────
