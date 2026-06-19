@@ -20,6 +20,7 @@ function slipUrl(string $path): string {
     if (str_starts_with($clean, 'uploads/')) {
         return '/tkn/handlers/' . $clean;
     }
+    // หากมีแค่ชื่อไฟล์ตรงๆ ให้ต่อ URL ไปยัง directory อัปโหลดหลัก
     return '/tkn/handlers/uploads/slips/' . basename($clean);
 }
 
