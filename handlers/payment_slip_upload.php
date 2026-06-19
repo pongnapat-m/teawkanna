@@ -80,7 +80,7 @@ if (empty($_FILES['slip']) || $_FILES['slip']['error'] !== UPLOAD_ERR_OK) {
 }
 
 // หา absolute path ของ upload directory โดยอิงจาก __DIR__ ปัจจุบันของไฟล์
-$upload_dir = dirname(__DIR__) . '/uploads/slips/';
+$upload_dir = __DIR__ . '/uploads/slips/';
 
 // [แก้ไขจุดที่ 1] ย้ายตำแหน่งเซฟ debug.log เข้าไปในโฟลเดอร์ slips ที่ได้รับสิทธิ์เขียนเขียนได้
 file_put_contents($upload_dir . 'debug.log', date('Y-m-d H:i:s') . " - File validation passed\n", FILE_APPEND);
