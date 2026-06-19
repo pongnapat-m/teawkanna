@@ -340,6 +340,9 @@ if (isset($_POST['register_btn'])) {
     } else {
         $table = ($role === 'owner') ? 'owner' : 'user';
         $stmt = $conn->prepare("SELECT username FROM `{$table}` WHERE username = ?");
+        if (!$stmt) {
+            die("Select prepare failed: (" . $conn->errno . ") " . $conn->error);
+        }
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
@@ -351,10 +354,16 @@ if (isset($_POST['register_btn'])) {
                 $bank_account = trim($_POST['bank_account'] ?? '');
                 $bank_name    = trim($_POST['bank_name'] ?? '');
                 $ins = $conn->prepare("INSERT INTO `owner` (username,password,owner_fullname,owner_email,owner_phonenumber,Bank_account,Bank_name,status) VALUES (?,?,?,?,?,?,?,'Pending')");
+            } else {
+                $ins = $conn->prepare("INSERT INTO `user` (username,password,fullname,email,phonenumber,point) VALUES (?,?,?,?,?,0)");
+            }
+            if (!$ins) {
+                die("Insert prepare failed: (" . $conn->errno . ") " . $conn->error);
+            }
+            if ($role === 'owner') {
                 $ins->bind_param("sssssss", $username, $passwordHash, $fullname, $email, $tel, $bank_account, $bank_name);
                 $successMsg = 'บัญชีเจ้าของสถานที่ถูกสร้างแล้ว รอการอนุมัติจาก Admin';
             } else {
-                $ins = $conn->prepare("INSERT INTO `user` (username,password,fullname,email,phonenumber,point) VALUES (?,?,?,?,?,0)");
                 $ins->bind_param("sssss", $username, $passwordHash, $fullname, $email, $tel);
                 $successMsg = 'คุณสามารถเข้าสู่ระบบได้ทันที';
             }
