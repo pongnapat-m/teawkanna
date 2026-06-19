@@ -20,6 +20,17 @@ sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:$PORT>/g" /etc/apache2/sites-avail
 echo "Injecting AllowOverride All and fixing canonical port redirects..."
 sed -i "s|<\/VirtualHost>|<Directory /var/www/html>\n    Options Indexes FollowSymLinks\n    AllowOverride All\n    Require all granted\n<\/Directory>\n    UseCanonicalName Off\n    UseCanonicalPhysicalPort Off\n<\/VirtualHost>|g" /etc/apache2/sites-available/000-default.conf
 
+# Configure runtime folders and permissions for the mounted Railway Volume
+# (When a volume is mounted at /var/www/html/tkn/handlers/uploads, it overrides the Dockerfile directories and is owned by root)
+echo "Setting up volume directories and permissions..."
+mkdir -p /var/www/html/tkn/handlers/uploads/slips \
+         /var/www/html/tkn/handlers/uploads/shop_pics \
+         /var/www/html/tkn/handlers/uploads/avatars \
+         /var/www/html/tkn/handlers/uploads/activity_pics
+
+chown -R www-data:www-data /var/www/html/tkn/handlers/uploads
+chmod -R 777 /var/www/html/tkn/handlers/uploads
+
 # Run the default apache2-foreground command
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
