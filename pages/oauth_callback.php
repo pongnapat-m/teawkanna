@@ -96,10 +96,13 @@ else {
 }
 
 // ─── ค้นหาหรือสร้าง user ─────────────────────────────────
-// เพิ่ม columns ถ้ายังไม่มี
-$conn->query("ALTER TABLE `user` ADD COLUMN IF NOT EXISTS oauth_provider VARCHAR(20) DEFAULT NULL");
-$conn->query("ALTER TABLE `user` ADD COLUMN IF NOT EXISTS oauth_id VARCHAR(100) DEFAULT NULL");
-$conn->query("ALTER TABLE `user` ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500) DEFAULT NULL");
+// เพิ่ม columns ถ้ายังไม่มี (compat: no IF NOT EXISTS for older MySQL)
+$oa1 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='user' AND COLUMN_NAME='oauth_provider' LIMIT 1");
+if ($oa1 && $oa1->num_rows === 0) { $conn->query("ALTER TABLE `user` ADD COLUMN oauth_provider VARCHAR(20) DEFAULT NULL"); }
+$oa2 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='user' AND COLUMN_NAME='oauth_id' LIMIT 1");
+if ($oa2 && $oa2->num_rows === 0) { $conn->query("ALTER TABLE `user` ADD COLUMN oauth_id VARCHAR(100) DEFAULT NULL"); }
+$oa3 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='user' AND COLUMN_NAME='avatar_url' LIMIT 1");
+if ($oa3 && $oa3->num_rows === 0) { $conn->query("ALTER TABLE `user` ADD COLUMN avatar_url VARCHAR(500) DEFAULT NULL"); }
 
 // หา user จาก oauth_id ก่อน
 $row = null;

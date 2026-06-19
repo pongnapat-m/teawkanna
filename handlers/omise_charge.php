@@ -181,8 +181,11 @@ $pm_label = match($method) {
     default          => $method,
 };
 
-// ── Ensure schema columns exist ───────────────────────────────────────────────
-$conn->query("ALTER TABLE payment ADD COLUMN IF NOT EXISTS charge_id VARCHAR(100) DEFAULT NULL");
+// ── Ensure schema columns exist (compat: no IF NOT EXISTS for older MySQL) ────
+$col_check = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='payment' AND COLUMN_NAME='charge_id' LIMIT 1");
+if ($col_check && $col_check->num_rows === 0) {
+    $conn->query("ALTER TABLE payment ADD COLUMN charge_id VARCHAR(100) DEFAULT NULL");
+}
 
 // ── Save/update payment record ────────────────────────────────────────────────
 $exist_q = $conn->prepare("SELECT payment_id FROM payment WHERE booking_id = ? LIMIT 1");

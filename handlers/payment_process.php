@@ -77,13 +77,22 @@ $amount       = (float)$booking['total_price'];
 $charge_id    = 'chrg_sandbox_' . bin2hex(random_bytes(8));
 $charge_time  = date('Y-m-d H:i:s');
 
-// ── Ensure charge_id column exists (migration on-the-fly) ────────────────────
-$conn->query("ALTER TABLE payment ADD COLUMN IF NOT EXISTS charge_id VARCHAR(100) DEFAULT NULL");
-$conn->query("ALTER TABLE payment ADD COLUMN IF NOT EXISTS admin_note TEXT DEFAULT NULL");
+// ── Ensure charge_id column exists (compat: no IF NOT EXISTS for older MySQL) ─
+$cc1 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='payment' AND COLUMN_NAME='charge_id' LIMIT 1");
+if ($cc1 && $cc1->num_rows === 0) {
+    $conn->query("ALTER TABLE payment ADD COLUMN charge_id VARCHAR(100) DEFAULT NULL");
+}
+$cc2 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='payment' AND COLUMN_NAME='admin_note' LIMIT 1");
+if ($cc2 && $cc2->num_rows === 0) {
+    $conn->query("ALTER TABLE payment ADD COLUMN admin_note TEXT DEFAULT NULL");
+}
 // แก้ default status ของ column ให้รองรับทุก status
 $conn->query("ALTER TABLE payment MODIFY COLUMN status VARCHAR(50) NOT NULL DEFAULT 'Pending'");
 // เพิ่ม payment_deadline ใน booking ถ้ายังไม่มี
-$conn->query("ALTER TABLE booking ADD COLUMN IF NOT EXISTS payment_deadline DATETIME NULL DEFAULT NULL");
+$cc3 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='booking' AND COLUMN_NAME='payment_deadline' LIMIT 1");
+if ($cc3 && $cc3->num_rows === 0) {
+    $conn->query("ALTER TABLE booking ADD COLUMN payment_deadline DATETIME NULL DEFAULT NULL");
+}
 
 // ── Save / find payment record ────────────────────────────────────────────────
 $exist_q = $conn->prepare("SELECT payment_id, charge_id FROM payment WHERE booking_id = ? LIMIT 1");
